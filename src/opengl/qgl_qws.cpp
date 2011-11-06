@@ -167,9 +167,29 @@ static EGLSurface qt_egl_create_surface
     return surf;
 }
 
+#ifdef QT_QWS_DIRECTFBGL
+void QGLContext::setEglContext(QEglContext* context)
+{
+    Q_D(QGLContext);
+    // Erasing current eglContext by the one set by DirectFBGL backend (after GetGL called)
+    d->eglContext = context;
+}
+#endif
+
+
 bool QGLContext::chooseContext(const QGLContext* shareContext)
 {
     Q_D(QGLContext);
+#ifdef QT_QWS_DIRECTFBGL
+    // When the DirectFBGL backend is enabled, only QGLWidget with a shared context
+    // are allowed to create and handle their own EglContext
+    // Others are handled into DirectFBGL backend
+    if(!shareContext)
+    {
+        d->ownsEglContext = false;
+        return true;
+    }
+#endif
 
     // Validate the device.
     if (!device())
@@ -205,7 +225,7 @@ bool QGLContext::chooseContext(const QGLContext* shareContext)
 
     // Create a new context for the configuration.
     if (!d->eglContext->createContext
-            (shareContext ? shareContext->d_func()->eglContext : 0)) {
+            (shareContext ? shareContext->d_func()->eglContext : 0, &configProps)) {
         delete d->eglContext;
         d->eglContext = 0;
         return false;
@@ -245,7 +265,12 @@ void QGLWidget::resizeEvent(QResizeEvent *)
     if (!isValid())
         return;
     makeCurrent();
-    if (!d->glcx->initialized())
+#ifdef QT_QWS_DIRECTFBGL
+    // Init QGLContext only if shared. Otherwise, it will failed because EGLContext is set yet
+    if (d->glcx->d_func()->ownsEglContext && !d->glcx->initialized())
+#else
+    if(!d->glcx->initialized())
+#endif
         glInit();
     resizeGL(width(), height());
     //handle overlay
@@ -279,7 +304,11 @@ void QGLWidget::setContext(QGLContext *context, const QGLContext* shareContext, 
     QGLContext* oldcx = d->glcx;
     d->glcx = context;
     if(!d->glcx->isValid())
-        d->glcx->create(shareContext ? shareContext : oldcx);
+#ifdef QT_QWS_DIRECTFBGL
+        d->glcx->create(shareContext ? shareContext : 0); // EGLcontext handled by DirectFBGL backend has no shared context
+#else
+        d->glcx->create(shareContext ? shareContext : oldcx); // To fix
+#endif
     if(deleteOldContext)
         delete oldcx;
 }

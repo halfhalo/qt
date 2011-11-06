@@ -375,18 +375,16 @@ bool QEglContext::createContext(QEglContext *shareContext, const QEglProperties 
 #endif
 
     // Create a new context for the configuration.
-    QEglProperties contextProps;
-    if (properties)
-        contextProps = *properties;
+    QEglProperties contextAttrs;
 #ifdef QT_OPENGL_ES_2
     if (apiType == QEgl::OpenGL)
-        contextProps.setValue(EGL_CONTEXT_CLIENT_VERSION, 2);
+        contextAttrs.setValue(EGL_CONTEXT_CLIENT_VERSION, 2);
 #endif
     sharing = false;
     if (shareContext && shareContext->ctx == EGL_NO_CONTEXT)
         shareContext = 0;
     if (shareContext) {
-        ctx = eglCreateContext(QEgl::display(), cfg, shareContext->ctx, contextProps.properties());
+        ctx = eglCreateContext(QEgl::display(), cfg, shareContext->ctx, contextAttrs.properties());
         if (ctx == EGL_NO_CONTEXT) {
             qWarning() << "QEglContext::createContext(): Could not share context:" << QEgl::errorString();
             shareContext = 0;
@@ -395,7 +393,7 @@ bool QEglContext::createContext(QEglContext *shareContext, const QEglProperties 
         }
     }
     if (ctx == EGL_NO_CONTEXT) {
-        ctx = eglCreateContext(display(), cfg, EGL_NO_CONTEXT, contextProps.properties());
+        ctx = eglCreateContext(display(), cfg, EGL_NO_CONTEXT, contextAttrs.properties());
         if (ctx == EGL_NO_CONTEXT) {
             qWarning() << "QEglContext::createContext(): Unable to create EGL context:" << QEgl::errorString();
             return false;

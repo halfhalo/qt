@@ -184,6 +184,14 @@ void QGLContext::reset()
 void QGLContext::makeCurrent()
 {
     Q_D(QGLContext);
+#ifdef QT_QWS_DIRECTFBGL
+    // If QGLContext does not handle the context, skip makeCurrent call
+    if(!d->ownsEglContext)
+    {
+        QGLContextPrivate::setCurrentContext(this);
+        return;
+    }
+#endif
     if (!d->valid || !d->eglContext || d->eglSurfaceForDevice() == EGL_NO_SURFACE) {
         qWarning("QGLContext::makeCurrent(): Cannot make invalid context current");
         return;
@@ -258,7 +266,7 @@ void QGLContext::doneCurrent()
 void QGLContext::swapBuffers() const
 {
     Q_D(const QGLContext);
-    if (!d->valid || !d->eglContext)
+    if (!d->valid || !d->eglContext || !d->ownsEglContext)
         return;
 
     d->eglContext->swapBuffers(d->eglSurfaceForDevice());
