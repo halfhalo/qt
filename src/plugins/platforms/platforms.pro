@@ -10,6 +10,9 @@ webos {
         DEFINES += TARGET_DESKTOP
     } else:qemu* {
         SUBDIRS += palm
+    } else:slate* {
+        SUBDIRS += palm
+        DEFINES += TARGET_DEVICE
     } else {
         SUBDIRS += palm
         SUBDIRS += webos
