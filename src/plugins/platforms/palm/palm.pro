@@ -18,7 +18,7 @@ HEADERS += hidd_qpa.h \
            ScreenEdgeFlickGesture.h
 
 webos {
-    qemu* {
+    slate* {
         include(../fb_base/fb_base.pri)
         SOURCES += ../linuxfb/qlinuxfbintegration.cpp \
                    emulatorfbintegration.cpp
