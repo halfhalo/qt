@@ -13,6 +13,9 @@ webos {
     } else:slate* {
         SUBDIRS += palm
         DEFINES += TARGET_DEVICE
+	} else:cedartrail* {
+        SUBDIRS += palm
+	    DEFINES += TARGET_DEVICE
     } else {
         SUBDIRS += palm
         SUBDIRS += webos
