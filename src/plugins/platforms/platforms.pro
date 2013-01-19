@@ -11,7 +11,7 @@ webos {
     } else:qemu* {
         SUBDIRS += palm
     } else:slate* {
-        SUBDIRS += palm
+        SUBDIRS += palm wayland eglfs
         DEFINES += TARGET_DEVICE
 	} else:cedartrail* {
         SUBDIRS += palm
