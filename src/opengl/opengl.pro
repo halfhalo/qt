@@ -156,6 +156,7 @@ embedded {
     } else {
        DEFINES *= QT_NO_FREETYPE
     }
+    contains(gfx-plugins, directfbgl):DEFINES += QT_QWS_DIRECTFBGL
 }
 
 symbian {
