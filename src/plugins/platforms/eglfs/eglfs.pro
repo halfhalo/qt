@@ -6,7 +6,7 @@ QT += opengl
 
 QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/platforms
 
-#DEFINES += QEGL_EXTRA_DEBUG
+DEFINES += QEGL_EXTRA_DEBUG
 
 #DEFINES += Q_OPENKODE
 

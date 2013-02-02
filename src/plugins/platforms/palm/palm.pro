@@ -3,7 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin $$(WEBOS_CONFIG)
 
 QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/platforms
-
+DEFINES +=QEGL_EXTRA_DEBUG
 SOURCES = main.cpp \
           hiddtp_qpa.cpp \
           NyxInputControl.cpp \
@@ -28,19 +28,19 @@ webos {
         LIBS_PRIVATE += -lnyx
     } else {
         QT += opengl
-        SOURCES += qeglfsintegration.cpp \
+        SOURCES += ../eglfs/qeglfsintegration.cpp \
                    ../eglconvenience/qeglconvenience.cpp \
                    ../eglconvenience/qeglplatformcontext.cpp \
-                   qeglfswindow.cpp \
-                   qeglfswindowsurface.cpp \
-                   qeglfsscreen.cpp
+                   ../eglfs/qeglfswindow.cpp \
+                   ../eglfs/qeglfswindowsurface.cpp \
+                   ../eglfs/qeglfsscreen.cpp
 
-        HEADERS += qeglfsintegration.h \
+        HEADERS += ../eglfs/qeglfsintegration.h \
                    ../eglconvenience/qeglconvenience.h \
                    ../eglconvenience/qeglplatformcontext.h \
-                   qeglfswindow.h \
-                   qeglfswindowsurface.h \
-                   qeglfsscreen.h
+                   ../eglfs/qeglfswindow.h \
+                   ../eglfs/qeglfswindowsurface.h \
+                   ../eglfs/qeglfsscreen.h
         DEFINES += TARGET_DEVICE
         LIBS_PRIVATE += -lnyx -ldl
     }
