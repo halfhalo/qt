@@ -76,6 +76,21 @@ public:
 
     virtual void fillRect(const QRectF &rect, const QColor &color) = 0;
     virtual void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect) = 0;
+    virtual void alphaFillRect(const QRectF &rect, const QColor &color, QPainter::CompositionMode cmode) {
+        Q_UNUSED(rect);
+        Q_UNUSED(color);
+        Q_UNUSED(cmode);
+        qWarning("Please implement alphaFillRect function in your platform or remove AlphaFillRectCapability from it");
+    }
+    virtual void drawPixmapOpacity(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect, QPainter::CompositionMode cmode, qreal opacity) {
+        Q_UNUSED(rect);
+        Q_UNUSED(pixmap);
+        Q_UNUSED(subrect);
+        Q_UNUSED(cmode);
+        Q_UNUSED(opacity);
+        qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
+    }
+
 
     bool isLocked() const;
 
