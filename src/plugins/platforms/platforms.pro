@@ -12,6 +12,7 @@ webos {
         SUBDIRS += palm
     } else:slate* {
         SUBDIRS += palm
+        SUBDIRS += webos
 #        SUBDIRS += directfb
         DEFINES += TARGET_DEVICE
 	} else:envy* {
